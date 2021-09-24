@@ -1,51 +1,53 @@
-const refs = {
-  timeItems: document.querySelectorAll('.value'),
-  daysValue: document.querySelector('span[data-value="days"]'),
-  hoursValue: document.querySelector('span[data-value="hours"]'),
-  minsValue: document.querySelector('span[data-value="mins"]'),
-  secsValue: document.querySelector('span[data-value="secs"]'),
-};
+class CountdownTimer {
+  constructor({ selector, targetDate }) {
+    this.selector = selector;
+    this.targetDate = targetDate;
+    this.timerID = null;
+  }
 
-const timerProto = new CountdownTimer({
+  getRefs() {
+    const timeItems = document.querySelectorAll('.value');
+    const daysValue = document.querySelector('span[data-value="days"]');
+    const hoursValue = document.querySelector('span[data-value="hours"]');
+    const minsValue = document.querySelector('span[data-value="mins"]');
+    const secsValue = document.querySelector('span[data-value="secs"]');
+    return { timeItems, daysValue, hoursValue, minsValue, secsValue };
+  }
 
-    
-});
+  getTime(time) {
+    const days = Math.floor(time / (1000 * 60 * 60 * 24));
+    const hours = this.pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    );
+    const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
 
-const timer = {
-  start() {
-    const targetDate = Date.parse('Oct 24, 2021 ');
+    return { days, hours, mins, secs };
+  }
 
-    const timerID = setInterval(() => {
-      const nowTime = Date.now();
-      const diffTime = targetDate - nowTime;
-      console.log(' time');
+  pad(value) {
+    return String(value).padStart(2, '0');
+  }
 
-      const timeResult = getTime(diffTime);
-      refs.daysValue.textContent = `${timeResult.days} `;
-      refs.hoursValue.textContent = `${timeResult.hours} `;
-      refs.minsValue.textContent = `${timeResult.mins} `;
-      refs.secsValue.textContent = `${timeResult.secs} `;
+  startInterval({ timeItems, daysValue, hoursValue, minsValue, secsValue }) {
+    this.timerID = setInterval(() => {
+      const diffTime = this.targetDate - Date.now();
+      const timeResult = this.getTime(diffTime);
+      daysValue.textContent = `${timeResult.days} `;
+      hoursValue.textContent = `${timeResult.hours} `;
+      minsValue.textContent = `${timeResult.mins} `;
+      secsValue.textContent = `${timeResult.secs} `;
 
       if (diffTime < 0) {
-        clearInterval(timerID);
-        refs.timeItems.forEach(item => (item.textContent = 0));
+        clearInterval(this.timerID);
+        timeItems.forEach(item => (item.textContent = 0));
       }
     }, 1000);
-  },
-};
-timer.start();
-
-function getTime(time) {
-  const days = Math.floor(time / (1000 * 60 * 60 * 24));
-  const hours = pad(
-    Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-  );
-  const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-  const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
-
-  return { days, hours, mins, secs };
+  }
 }
 
-function pad(value) {
-  return String(value).padStart(2, '0');
-}
+const timer = new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: new Date('Oct 15, 2021'),
+});
+timer.startInterval(timer.getRefs());
