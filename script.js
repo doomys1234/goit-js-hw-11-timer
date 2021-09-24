@@ -4,30 +4,54 @@
 // });
 
 const refs = {
-    timerValues: document.querySelectorAll('.value')
-
+    timeItems: document.querySelectorAll('.value'),
+    daysValue: document.querySelector('span[data-value="days"]'),
+    hoursValue: document.querySelector('span[data-value="hours"]'),
+    minsValue: document.querySelector('span[data-value="mins"]'),
+    secsValue: document.querySelector('span[data-value="secs"]')
 }
+
 
 
 const timer = {
 
     start() {
-        const targetDate = Date.parse('Jul 17, 2021')
-        
+        const targetDate = Date.parse('Oct 24, 2021 ')
+          
+     const  timerID = setInterval(() => {
+       
+        const nowTime = Date.now()
+        const diffTime = targetDate - nowTime  
+        console.log(" time");
 
-        setInterval(() => {
-            const startTime = Date.now()
-              const diffTime = startTime - targetDate   
-            const {days,hours,mins,secs} = getTime(diffTime)
-            console.log(`${days},${hours},${mins},${secs}`);
-            refs.timerValues.forEach(nums => {
-               console.log(nums.dataset.value);
-           })
+            const timeResult = getTime(diffTime)
+            refs.daysValue.textContent = `${timeResult.days} `
+            refs.hoursValue.textContent = `${timeResult.hours} `
+            refs.minsValue.textContent = `${timeResult.mins} `
+            refs.secsValue.textContent = `${timeResult.secs} `
+
+            if(diffTime < 0){
+                clearInterval(timerID)
+                refs.timeItems.forEach(item=>item.textContent = 0)
+               
+
+            }
+            
+
 
         },1000)
-    }
+
+    },
+
+    
+    
+   
+
 }
 timer.start()
+
+
+
 
 function getTime(time){
 /*

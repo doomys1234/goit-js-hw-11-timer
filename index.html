@@ -6,20 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        html {
+            box-sizing: border-box;
+            }
+
+            *,
+            *::before,
+            *::after {
+            box-sizing: inherit;
+            }
         .timer{
-            font-size: 30px;
+            font-size: 50px;
             margin-top: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
+            text-align: center;
+        }
+
+        .label{
+            margin-top: 20px;
+          display:block;
+          font-size: 30px;
+          
+        }
+        .value{
+            
+            background-color: beige;
+            padding: 20px;
+            border: 2px solid rgb(196, 190, 190);
+            border-radius: 50%;
+        }
+        
+
+        .field{
+          margin-left: 20px;
         }
     </style>
 </head>
 <body>
     <div class="timer" id="timer-1">
   <div class="field">
-    <span class="value" data-value="days">11</span>
-    <span class="label">Days</span>
+      <span class="value" data-value="days">11</span>
+      <span class="label">Days</span>
   </div>
 
   <div class="field">
